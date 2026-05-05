@@ -142,3 +142,29 @@ For correct colour switching, name the mesh groups in your 3D tool accordingly (
 ## Publisher
 
 **LightHouse Tech SA** — `ch.lighthousetech.tami.configurator`
+
+---
+
+## Contact
+
+For technical questions, bug reports, integration requests, or commercial enquiries, please get in touch with our development team:
+
+- **Email:** [dev@lighthousetech.ch](mailto:dev@lighthousetech.ch)
+- **Company:** LightHouse Tech SA
+- **Website:** [lighthousetech.ch](https://lighthousetech.ch)
+
+We aim to respond to all enquiries within two business days.
+
+---
+
+## Copyright & License
+
+Copyright © 2026 **LightHouse Tech SA**. All rights reserved.
+
+This software and its source code, including the TAMI Configurator application, the bundled 3D models, assets, branding, and documentation, are the exclusive property of LightHouse Tech SA and are protected by Swiss and international copyright, trademark, and intellectual-property laws.
+
+No part of this software may be copied, reproduced, modified, distributed, sublicensed, reverse-engineered, or used to create derivative works — in whole or in part — without the prior written consent of LightHouse Tech SA.
+
+**TAMI™** and the LightHouse Tech logo are trademarks of LightHouse Tech SA. All other trademarks referenced in this document are the property of their respective owners.
+
+The software is provided *"as is"*, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall LightHouse Tech SA be liable for any claim, damages, or other liability arising from the use of this software.
