@@ -317,7 +317,7 @@
       border-radius: 8px;
     }
 
-    .sw-black    { background: #1a1a1a; }
+    .sw-black    { background: #1a1a1a; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
     .sw-white    { background: #f5f3ef; border: 1px solid #d1d5db; }
     .sw-havana   {
       background-color: #6e3a0f;
@@ -886,7 +886,7 @@
 
     // ── Frame colour palette (matches the colour cards in step 2) ──
     const FRAME_COLOURS = {
-      'Black':    { color: 0x1a1a1a, metalness: 0.2, roughness: 0.45 },
+      'Black':    { color: 0x1a1a1a, metalness: 0.0, roughness: 0.95 },
       'White':    { color: 0xf5f3ef, metalness: 0.1, roughness: 0.55 },
       'Havana':   { color: 0x8a4a14, metalness: 0.05, roughness: 0.7, texture: 'havana' },
       'Burgundy': { color: 0x6b1424, metalness: 0.3,  roughness: 0.4  }
