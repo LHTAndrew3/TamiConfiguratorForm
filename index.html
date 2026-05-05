@@ -238,6 +238,59 @@
     .placeholder-icon svg { width: 38px; height: 38px; }
     .placeholder-icon span { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
 
+    /* ── SIZE TOGGLE ── */
+    .size-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .size-toggle-opt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+
+    .size-toggle-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      transition: color var(--t);
+    }
+
+    .size-toggle-num {
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--blue);
+      line-height: 1;
+      letter-spacing: -1px;
+      margin: 8px 0 6px;
+      transition: color var(--t);
+    }
+
+    .size-toggle-specs {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      transition: color var(--t);
+    }
+
+    .size-toggle-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color var(--t);
+    }
+
+
     .card-body {
       padding: 12px 14px 14px;
     }
@@ -371,7 +424,7 @@
       position: relative;
       width: 100%;
       height: 380px;
-      background: #ffffff;
+      background: var(--blue);
       border: 1px solid var(--blue-mid);
       border-radius: 10px;
       overflow: hidden;
@@ -573,28 +626,22 @@
             <div class="step-number">1</div>
             <div class="step-title">Choose Your Size</div>
           </div>
-          <div class="options-grid cols-2">
+          <div class="size-toggle">
 
-            <label class="option-card" id="card-large">
+            <label class="option-card size-toggle-opt" id="card-large">
               <input type="radio" name="size" value="Large (55)" onchange="selectOption('size','card-large','Large (55)')">
-              <div class="card-image">
-                <img src="images/size-large.png" alt="Large frame">
-              </div>
-              <div class="card-body">
-                <div class="card-label">Large</div>
-                <div class="card-desc">Size 55 – 19 – 145 — wider fit</div>
-              </div>
+              <div class="size-toggle-name">Large</div>
+              <div class="size-toggle-num">55</div>
+              <div class="size-toggle-specs">55 – 19 – 145</div>
+              <div class="size-toggle-hint">wider fit</div>
             </label>
 
-            <label class="option-card" id="card-regular">
+            <label class="option-card size-toggle-opt" id="card-regular">
               <input type="radio" name="size" value="Regular (52)" onchange="selectOption('size','card-regular','Regular (52)')">
-              <div class="card-image">
-                <img src="images/size-regular.png" alt="Regular frame">
-              </div>
-              <div class="card-body">
-                <div class="card-label">Regular</div>
-                <div class="card-desc">Size 52 – 18 – 140 — standard fit</div>
-              </div>
+              <div class="size-toggle-name">Regular</div>
+              <div class="size-toggle-num">52</div>
+              <div class="size-toggle-specs">52 – 18 – 140</div>
+              <div class="size-toggle-hint">standard fit</div>
             </label>
 
           </div>
