@@ -28,14 +28,26 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": ["nsis", "dmg", "app"],
     "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
       "icons/icon.ico"
     ],
     "publisher": "LightHouse Tech SA",
     "category": "Business",
     "shortDescription": "TAMI eyewear configurator",
-    "longDescription": "Configure your TAMI assistive mobility eyewear: size, frame colour, and lens type."
+    "longDescription": "Configure your TAMI assistive mobility eyewear: size, frame colour, and lens type.",
+    "macOS": {
+      "signingIdentity": null,
+      "minimumSystemVersion": "10.15",
+      "dmg": {
+        "appPosition": { "x": 180, "y": 170 },
+        "applicationFolderPosition": { "x": 480, "y": 170 }
+      }
+    }
   },
   "plugins": {
     "shell": {
