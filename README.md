@@ -121,10 +121,11 @@ Put the new model at `blender/tami-glasses.gltf` (and the companion `.bin` file 
 The viewer automatically classifies meshes by name:
 
 - names containing `lens / lente / lenti / glass` → lens (semi-transparent, tinted)
+- names containing `templetip / tip / punta / earpiece` → temple tips (the rear part that rests on the ears)
 - names containing `arm / temple / asta / aste` → temple arms
 - everything else → front frame
 
-For correct colour switching, name the mesh groups in your 3D tool accordingly (e.g. `Frame_Front`, `Arms`, `Lenses`).
+For correct colour switching, name the mesh groups in your 3D tool accordingly (e.g. `Frame_Front`, `Arms`, `TempleTips`, `Lenses`). The temple-tip hints are checked **before** the arm hints, so a compound named `TempleTips` is correctly classified as tips and not arms.
 
 ---
 

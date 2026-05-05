@@ -1007,11 +1007,13 @@
       'Gradient Grey': { color: 0x8a96a3, opacity: 0.55 }
     };
 
-    // Mesh classification — matches FreeCAD compound names "Frame_Front", "Arms", "Lenses".
-    // Lens hints are checked FIRST so "Lenses" is not caught by the generic front rules.
-    const LENS_NAME_HINTS  = ['lens', 'lente', 'lenti', 'glass'];
-    const ARM_NAME_HINTS   = ['arm', 'temple', 'asta', 'aste', 'leg', 'side'];
-    const FRONT_NAME_HINTS = ['front', 'frame', 'rim', 'bridge', 'frontal', 'frontale'];
+    // Mesh classification — matches FreeCAD compound names "Frame_Front", "Arms", "TempleTips", "Lenses".
+    // Specific hints (lens, templeTip) are checked BEFORE generic ones so e.g. "TempleTips"
+    // is not swallowed by the "temple" hint of arms.
+    const LENS_NAME_HINTS       = ['lens', 'lente', 'lenti', 'glass'];
+    const TEMPLE_TIP_NAME_HINTS = ['templetip', 'temple_tip', 'temple-tip', 'tip', 'punta', 'earpiece', 'ear_piece'];
+    const ARM_NAME_HINTS        = ['arm', 'temple', 'asta', 'aste', 'leg', 'side'];
+    const FRONT_NAME_HINTS      = ['front', 'frame', 'rim', 'bridge', 'frontal', 'frontale'];
 
     function classifyMesh(mesh, modelBBoxSize) {
       // Walk up the parent chain so children of a named compound inherit the role
@@ -1019,9 +1021,10 @@
       while (p) {
         const pn = (p.name || '').toLowerCase();
         if (pn) {
-          if (LENS_NAME_HINTS.some(h => pn.includes(h)))  return 'lens';
-          if (ARM_NAME_HINTS.some(h => pn.includes(h)))   return 'arm';
-          if (FRONT_NAME_HINTS.some(h => pn.includes(h))) return 'front';
+          if (LENS_NAME_HINTS.some(h => pn.includes(h)))        return 'lens';
+          if (TEMPLE_TIP_NAME_HINTS.some(h => pn.includes(h))) return 'templeTip';
+          if (ARM_NAME_HINTS.some(h => pn.includes(h)))         return 'arm';
+          if (FRONT_NAME_HINTS.some(h => pn.includes(h)))       return 'front';
         }
         p = p.parent;
       }
@@ -1033,9 +1036,10 @@
     }
 
     // Mesh bookkeeping for runtime recolouring
-    const frontMeshes = [];
-    const armMeshes   = [];
-    const lensMeshes  = [];
+    const frontMeshes      = [];
+    const armMeshes        = [];
+    const templeTipMeshes  = [];
+    const lensMeshes       = [];
 
     function ensureClonedMaterial(mesh) {
       if (!mesh.userData._matCloned) {
@@ -1097,10 +1101,13 @@
       const preset = FRAME_COLOURS[colourName];
       if (!preset) return;
       if (frontMeshes.length) paintMeshes(frontMeshes, preset);
+      // Arms follow the frame only when the user picks White; otherwise they stay black.
       if (armMeshes.length) {
         const armPreset = colourName === 'White' ? FRAME_COLOURS['White'] : ARMS_DEFAULT;
         paintMeshes(armMeshes, armPreset);
       }
+      // Temple tips are always black, regardless of the chosen frame colour.
+      if (templeTipMeshes.length) paintMeshes(templeTipMeshes, ARMS_DEFAULT);
     }
 
     function applyLensColour(lensName) {
@@ -1147,13 +1154,14 @@
         model.traverse(obj => {
           if (obj.isMesh) {
             const role = classifyMesh(obj, size);
-            if      (role === 'arm')  armMeshes.push(obj);
-            else if (role === 'lens') lensMeshes.push(obj);
-            else                      frontMeshes.push(obj);
+            if      (role === 'arm')        armMeshes.push(obj);
+            else if (role === 'templeTip')  templeTipMeshes.push(obj);
+            else if (role === 'lens')       lensMeshes.push(obj);
+            else                            frontMeshes.push(obj);
             console.log(`• "${obj.name || '(unnamed)'}" → ${role}`);
           }
         });
-        console.log(`Front: ${frontMeshes.length} · Arms: ${armMeshes.length} · Lenses: ${lensMeshes.length}`);
+        console.log(`Front: ${frontMeshes.length} · Arms: ${armMeshes.length} · TempleTips: ${templeTipMeshes.length} · Lenses: ${lensMeshes.length}`);
         console.groupEnd();
 
         scene.add(model);
