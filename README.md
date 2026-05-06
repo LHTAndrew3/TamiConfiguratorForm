@@ -1,6 +1,6 @@
 # TAMI Configurator
 
-Desktop application for configuring TAMI assistive mobility eyewear, developed by **LightHouse Tech SA**.
+Desktop application for configuring TAMI assistive mobility eyewear, developed by **Lighthouse Tech SA**.
 
 The app guides sales staff or end customers through a three-step visual configurator — size, frame colour, and lens type — with a live 3D preview of the glasses. Once satisfied, the user fills in their contact details and the app opens their default email client with the configuration pre-filled and ready to send.
 
@@ -9,7 +9,7 @@ The app guides sales staff or end customers through a three-step visual configur
 ## What it does
 
 1. **Step 1 – Size** — choose between Large (55–19–145) and Regular (52–18–140)
-2. **Step 2 – Frame colour** — Black, White, Havana (tortoiseshell), or Burgundy
+2. **Step 2 – Frame colour** — Black, White, Havana, or Burgundy
 3. **Step 3 – Lens type** — Neutral, Yellow, Gradient Blue, or Gradient Grey
 4. **3D preview** — interactive Three.js viewer (drag to rotate 360°, scroll to zoom) that updates in real time with the selected colour and lens tint
 5. **Order form** — name, email, and optional notes; on submit the app opens a pre-filled `mailto:` to `dev@lighthousetech.ch`
@@ -175,7 +175,7 @@ For correct colour switching, name the mesh groups in your 3D tool accordingly (
 
 ## Publisher
 
-**LightHouse Tech SA** — `ch.lighthousetech.tami.configurator`
+**Lighthouse Tech SA** — `ch.lighthousetech.tami.configurator`
 
 ---
 
@@ -184,7 +184,7 @@ For correct colour switching, name the mesh groups in your 3D tool accordingly (
 For technical questions, bug reports, integration requests, or commercial enquiries, please get in touch with our development team:
 
 - **Email:** [dev@lighthousetech.ch](mailto:dev@lighthousetech.ch)
-- **Company:** LightHouse Tech SA
+- **Company:** Lighthouse Tech SA
 - **Website:** [lighthousetech.ch](https://lighthousetech.ch)
 
 We aim to respond to all enquiries within two business days.
@@ -193,12 +193,14 @@ We aim to respond to all enquiries within two business days.
 
 ## Copyright & License
 
-Copyright © 2026 **LightHouse Tech SA**. All rights reserved.
+Copyright © 2026 **Lighthouse Tech SA**. All rights reserved.
 
-This software and its source code, including the TAMI Configurator application, the bundled 3D models, assets, branding, and documentation, are the exclusive property of LightHouse Tech SA and are protected by Swiss and international copyright, trademark, and intellectual-property laws.
+This software and its source code, including the TAMI Configurator application, the bundled 3D models, assets, branding, and documentation, are the confidential and proprietary property of Lighthouse Tech SA and are protected by Swiss and international copyright, trademark, and intellectual-property laws.
 
-No part of this software may be copied, reproduced, modified, distributed, sublicensed, reverse-engineered, or used to create derivative works — in whole or in part — without the prior written consent of LightHouse Tech SA.
+It is provided to authorized users solely for internal use in connection with Lighthouse Tech products. No part of this software, in source or binary form, may be reproduced, distributed, modified, transmitted, displayed, sold, licensed, sublicensed, reverse-engineered, decompiled, or otherwise exploited — in whole or in part — without the prior express written permission of Lighthouse Tech SA.
 
-**TAMI™** and the LightHouse Tech logo are trademarks of LightHouse Tech SA. All other trademarks referenced in this document are the property of their respective owners.
+**TAMI™** and the Lighthouse Tech logo are trademarks of Lighthouse Tech SA. All other trademarks referenced in this document are the property of their respective owners.
 
-The software is provided *"as is"*, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall LightHouse Tech SA be liable for any claim, damages, or other liability arising from the use of this software.
+The software is provided *"as is"*, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall Lighthouse Tech SA be liable for any direct, indirect, incidental, special, exemplary, or consequential damages arising in any way out of the use of this software.
+
+See [LICENSE](LICENSE) for the full terms.
