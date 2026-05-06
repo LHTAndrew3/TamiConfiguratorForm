@@ -42,9 +42,6 @@
     "longDescription": "Configure your TAMI assistive mobility eyewear: size, frame colour, and lens type.",
     "macOS": {
       "signingIdentity": "Developer ID Application: Lighthouse Tech SA (RKV9R5HFW4)",
-      "notarize": {
-        "teamId": "RKV9R5HFW4"
-      },
       "minimumSystemVersion": "10.15",
       "dmg": {
         "appPosition": { "x": 180, "y": 170 },
