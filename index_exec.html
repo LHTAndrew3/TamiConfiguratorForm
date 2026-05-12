@@ -1284,8 +1284,8 @@
         '&body='    + encodeURIComponent(bodyLines.join('\r\n')) +
         '&cc='      + encodeURIComponent(email);
 
-      // Open the mailto link in the user's default mail client (Outlook, Gmail, etc.)
-      window.location.href = mailto;
+      // Use Tauri shell to open the mailto link (window.location.href doesn't trigger the OS email app in a WebView)
+      window.__TAURI__.core.invoke('open_url', { url: mailto });
 
       // Show the success screen — the user can close the mail client and the page reflects that the order was prepared
       setTimeout(() => {
