@@ -586,6 +586,23 @@
 
     #success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; }
 
+    .back-btn {
+      margin-top: 32px;
+      padding: 14px 28px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--t), transform var(--t);
+    }
+
+    .back-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
     /* ── FOOTER ── */
     footer {
       background: var(--blue);
@@ -599,14 +616,6 @@
   </style>
 </head>
 <body>
-
-  <!-- HEADER -->
-  <header>
-    <div class="logo-area">
-      <img src="assets/company-logo.png" alt="LightHouse Tech" class="company-logo">
-    </div>
-    <div class="header-sub">Your Assistive Mobility Eyewear</div>
-  </header>
 
   <!-- HERO -->
   <div class="hero">
@@ -820,13 +829,10 @@
       <div class="success-icon">✓</div>
       <h2>Configuration Sent!</h2>
       <p>Your TAMI configuration has been delivered to the LightHouse Tech team. We'll get back to you shortly at the email address you provided.</p>
+      <button type="button" class="back-btn" id="back-home-btn">← Back to home</button>
     </div>
 
   </main>
-
-  <footer>
-    &copy; <span id="year"></span> LightHouse Tech SA — All rights reserved
-  </footer>
 
   <!-- THREE.JS for 3D viewer -->
   <script type="importmap">
@@ -1224,7 +1230,14 @@
   </script>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // ── Back-to-home button on the success screen ──
+    // We can't just set window.location.href: the configurator is hosted on a
+    // different origin (GitHub Pages) and embedded inside Wix, so navigating
+    // the iframe would not take the visitor anywhere meaningful. Instead we
+    // ask the parent Wix page to perform the redirect via postMessage.
+    document.getElementById('back-home-btn').addEventListener('click', () => {
+      postToParent({ type: 'navigateHome' });
+    });
 
     const selection = { size: null, colour: null, lens: null };
     const cardMap   = { size: null, colour: null, lens: null };
