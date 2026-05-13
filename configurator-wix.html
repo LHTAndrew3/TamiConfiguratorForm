@@ -508,7 +508,8 @@
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       border: 1.5px solid #e5e7eb;
       border-radius: 8px;
       padding: 11px 13px;
@@ -521,10 +522,33 @@
     }
 
     .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group textarea:focus,
+    .form-group select:focus {
       outline: none;
       border-color: var(--blue);
       background: var(--white);
+    }
+
+    /* ── NEWSLETTER CONSENT ── */
+    .consent-row { margin-top: 8px; }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .consent-label input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      accent-color: var(--blue);
+      cursor: pointer;
     }
 
     /* ── SEND BUTTON ── */
@@ -811,10 +835,40 @@
             </div>
           </div>
           <div class="form-row">
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <select id="country" name="Country" required>
+                <option value="" disabled selected>Select your country</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Italy">Italy</option>
+                <option value="Germany">Germany</option>
+                <option value="France">France</option>
+                <option value="Austria">Austria</option>
+                <option value="Spain">Spain</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Belgium">Belgium</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="United States">United States</option>
+                <option value="Other">Other (specify in address)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="address">Address *</label>
+              <input type="text" id="address" name="Address" required placeholder="Street, city, postal code">
+            </div>
+          </div>
+          <div class="form-row">
             <div class="form-group full">
               <label for="notes">Additional Notes</label>
               <textarea id="notes" name="Notes" rows="3" placeholder="Any specific requests or questions…"></textarea>
             </div>
+          </div>
+
+          <div class="consent-row">
+            <label class="consent-label">
+              <input type="checkbox" id="newsletter" name="Newsletter">
+              <span>I'd like to receive occasional updates from Lighthouse Tech about new products, accessories, and events.</span>
+            </label>
           </div>
 
           <p class="error-msg" id="error-msg">Please complete all three steps before sending.</p>
@@ -1285,12 +1339,15 @@
       errEl.style.display = 'none';
 
       const payload = {
-        size:   selection.size,
-        colour: selection.colour,
-        lens:   selection.lens,
-        name:   document.getElementById('name').value.trim(),
-        email:  document.getElementById('email').value.trim(),
-        notes:  document.getElementById('notes').value.trim()
+        size:       selection.size,
+        colour:     selection.colour,
+        lens:       selection.lens,
+        name:       document.getElementById('name').value.trim(),
+        email:      document.getElementById('email').value.trim(),
+        country:    document.getElementById('country').value,
+        address:    document.getElementById('address').value.trim(),
+        notes:      document.getElementById('notes').value.trim(),
+        newsletter: document.getElementById('newsletter').checked
       };
 
       awaitingAck = true;
