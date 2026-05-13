@@ -1290,8 +1290,14 @@
     // The parent Wix page acknowledges the submission. On success we swap to the
     // success screen; on failure we re-enable the button so the user can retry.
     window.addEventListener('message', (event) => {
+      console.log('[configurator] message from parent:', event.data, 'origin:', event.origin);
       const msg = event.data;
       if (!msg || typeof msg !== 'object') return;
+
+      // Reply to PING from Wix diagnostics
+      if (msg.type === 'ping') {
+        postToParent({ type: 'pong', t: msg.t });
+      }
 
       if (msg.type === 'configurationSent') {
         document.getElementById('configurator').style.display = 'none';
@@ -1309,8 +1315,17 @@
       }
     });
 
-    // Signal to the parent that the configurator is alive and listening
-    postToParent({ type: 'configuratorReady' });
+    // Signal to the parent that the configurator is alive and listening.
+    // We log it AND retry a few times because Wix's HtmlComponent may not have
+    // its message channel ready immediately on first script execution.
+    function announceReady() {
+      console.log('[configurator] posting configuratorReady to parent (has parent?',
+        window.parent !== window, ')');
+      postToParent({ type: 'configuratorReady' });
+    }
+    announceReady();
+    setTimeout(announceReady, 500);
+    setTimeout(announceReady, 2000);
   </script>
 
 </body>
