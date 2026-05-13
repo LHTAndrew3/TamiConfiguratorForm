@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAMI – Configure Your Eyewear</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #4a6ec4;
+      --blue-dark:  #3558a8;
+      --blue-light: #e8eef8;
+      --blue-mid:   #c8d5f0;
+      --text:       #111827;
+      --muted:      #6b7280;
+      --bg:         #f9fafb;
+      --white:      #ffffff;
+      --radius:     14px;
+      --t:          0.22s ease;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--blue-mid);
+      padding: 0 40px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-area img.company-logo {
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .header-sub {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO BAND ── */
+    .hero {
+      background: var(--blue);
+      padding: 28px 40px 40px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 span {
+      font-weight: 300;
+      opacity: 0.75;
+    }
+
+    .hero p {
+      font-size: 15px;
+      opacity: 0.8;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .step {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: 0 1px 12px rgba(74,110,196,0.08);
+      border: 1px solid var(--blue-mid);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    /* ── GRIDS ── */
+    .options-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .options-grid.cols-2     { grid-template-columns: repeat(2, 1fr); }
+    .options-grid.cols-4     { grid-template-columns: repeat(4, 1fr); }
+    .options-grid.cols-2-lens{ grid-template-columns: repeat(2, 1fr); }
+
+    @media (max-width: 560px) {
+      .options-grid.cols-4      { grid-template-columns: repeat(2, 1fr); }
+      .options-grid.cols-2-lens { grid-template-columns: 1fr; }
+      header { padding: 0 20px; }
+      .hero  { padding: 20px 20px 32px; }
+      .hero h1 { font-size: 26px; }
+    }
+
+    /* ── OPTION CARD ── */
+    .option-card {
+      position: relative;
+      cursor: pointer;
+      border: 2px solid #e5e7eb;
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+      background: var(--bg);
+      display: block;
+    }
+
+    .option-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 18px rgba(74,110,196,0.16);
+      transform: translateY(-2px);
+    }
+
+    .option-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .option-card.selected {
+      border-color: var(--blue);
+      box-shadow: 0 4px 22px rgba(74,110,196,0.22);
+    }
+
+    .option-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 22px;
+      height: 22px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 22px;
+      text-align: center;
+    }
+
+    /* ── CARD IMAGE AREA ── */
+    .card-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--blue-mid);
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-image .placeholder-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.45;
+      color: var(--blue);
+    }
+
+    .placeholder-icon svg { width: 38px; height: 38px; }
+    .placeholder-icon span { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── SIZE TOGGLE ── */
+    .size-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .size-toggle-opt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+
+    .size-toggle-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      transition: color var(--t);
+    }
+
+    .size-toggle-num {
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--blue);
+      line-height: 1;
+      letter-spacing: -1px;
+      margin: 8px 0 6px;
+      transition: color var(--t);
+    }
+
+    .size-toggle-specs {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      transition: color var(--t);
+    }
+
+    .size-toggle-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color var(--t);
+    }
+
+
+    .card-body {
+      padding: 12px 14px 14px;
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── COLOUR SWATCHES ── */
+    .swatch-area {
+      width: 100%;
+      height: 52px;
+      border-radius: 8px;
+    }
+
+    .sw-black    { background: #1a1a1a; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+    .sw-white    { background: #f5f3ef; border: 1px solid #d1d5db; }
+    .sw-havana   {
+      background-color: #6e3a0f;
+      background-image:
+        radial-gradient(ellipse 22px 16px at 18% 28%, #1f0e02 60%, transparent 70%),
+        radial-gradient(ellipse 18px 22px at 68% 22%, #2a1505 60%, transparent 72%),
+        radial-gradient(ellipse 26px 18px at 38% 65%, #1f0e02 60%, transparent 70%),
+        radial-gradient(ellipse 16px 20px at 82% 70%, #14080d 60%, transparent 72%),
+        radial-gradient(ellipse 14px 18px at 52% 42%, #2a1505 60%, transparent 72%),
+        radial-gradient(ellipse 20px 14px at 12% 80%, #1f0e02 60%, transparent 70%),
+        radial-gradient(ellipse 18px 16px at 88% 45%, #3a1d08 60%, transparent 72%),
+        radial-gradient(ellipse 18px 14px at 35% 50%, #e8a838 50%, transparent 70%),
+        radial-gradient(ellipse 14px 12px at 78% 88%, #c47d1a 50%, transparent 70%),
+        radial-gradient(ellipse 12px 10px at 5% 50%, #e8a838 50%, transparent 70%);
+    }
+    .sw-burgundy { background: linear-gradient(135deg, #4a0e1a 0%, #8b1a2e 100%); }
+
+    /* ── LENS SWATCHES — colours from TAMI branding PDF ── */
+    .lens-card .card-image { aspect-ratio: 3/1.3; }
+
+    .lens-swatch { width: 100%; height: 100%; }
+
+    .ls-neutral  { background: linear-gradient(135deg, #d0cec9, #a8a39a); }
+    .ls-yellow   { background: linear-gradient(135deg, #f5e8a0, #e8d870); }
+    .ls-blue     { background: linear-gradient(180deg, #b8cce8 0%, #dce8f5 60%, #f0f5fb 100%); }
+    .ls-grey     { background: linear-gradient(180deg, #9baab8 0%, #c8d4dc 60%, #e8ecf0 100%); }
+
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      margin-top: 36px;
+      background: var(--blue);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      flex-shrink: 0;
+    }
+
+    .summary-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chip .chip-label {
+      font-weight: 400;
+      opacity: 0.7;
+    }
+
+    /* ── 3D PREVIEW ── */
+    .preview-3d-section {
+      margin-top: 36px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 28px 28px;
+      box-shadow: 0 1px 12px rgba(74,110,196,0.08);
+      border: 1px solid var(--blue-mid);
+    }
+
+    .preview-3d-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .preview-3d-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    #viewer-3d {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: var(--blue);
+      border: 1px solid var(--blue-mid);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    #viewer-3d:active { cursor: grabbing; }
+
+    #viewer-3d canvas { display: block; width: 100% !important; height: 100% !important; }
+
+    #viewer-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    .preview-3d-hint {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── CUSTOMER FORM ── */
+    .customer-section {
+      margin-top: 36px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: 0 1px 12px rgba(74,110,196,0.08);
+      border: 1px solid var(--blue-mid);
+    }
+
+    .customer-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .customer-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      font-family: inherit;
+      transition: border-color var(--t);
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: var(--white);
+    }
+
+    /* ── SEND BUTTON ── */
+    .send-btn {
+      margin-top: 24px;
+      width: 100%;
+      padding: 17px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--t), transform var(--t);
+    }
+
+    .send-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── ERROR ── */
+    .error-msg {
+      color: #dc2626;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ── SUCCESS ── */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 100px 24px;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--blue);
+      border-radius: 50%;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #fff;
+    }
+
+    #success-screen h2 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    #success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue);
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-area">
+      <img src="assets/company-logo.png" alt="LightHouse Tech" class="company-logo">
+    </div>
+    <div class="header-sub">Your Assistive Mobility Eyewear</div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">TAMI Configurator</div>
+    <h1>Build Your <span>Perfect</span> Smart Glasses</h1>
+    <p>Select your size, frame colour, and lens type. We'll take care of the rest.</p>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div id="configurator">
+      <div class="steps">
+
+        <!-- STEP 1 — SIZE -->
+        <div class="step">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Choose Your Size</div>
+          </div>
+          <div class="size-toggle">
+
+            <label class="option-card size-toggle-opt" id="card-large">
+              <input type="radio" name="size" value="Large (55)" onchange="selectOption('size','card-large','Large (55)')">
+              <div class="size-toggle-name">Large</div>
+              <div class="size-toggle-num">55</div>
+              <div class="size-toggle-specs">55 – 19 – 145</div>
+              <div class="size-toggle-hint">wider fit</div>
+            </label>
+
+            <label class="option-card size-toggle-opt" id="card-regular">
+              <input type="radio" name="size" value="Regular (52)" onchange="selectOption('size','card-regular','Regular (52)')">
+              <div class="size-toggle-name">Regular</div>
+              <div class="size-toggle-num">52</div>
+              <div class="size-toggle-specs">52 – 18 – 140</div>
+              <div class="size-toggle-hint">standard fit</div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- STEP 2 — COLOUR -->
+        <div class="step">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">Choose Frame Colour</div>
+          </div>
+          <div class="options-grid cols-4">
+
+            <label class="option-card" id="card-black">
+              <input type="radio" name="colour" value="Black" onchange="selectOption('colour','card-black','Black')">
+              <div class="card-image" style="padding:14px;">
+                <!-- Sostituire con: <img src="images/frame-black.jpg" alt="Black"> -->
+                <div class="swatch-area sw-black"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Black</div>
+              </div>
+            </label>
+
+            <label class="option-card" id="card-white">
+              <input type="radio" name="colour" value="White" onchange="selectOption('colour','card-white','White')">
+              <div class="card-image" style="padding:14px;">
+                <!-- Sostituire con: <img src="images/frame-white.jpg" alt="White"> -->
+                <div class="swatch-area sw-white"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">White</div>
+              </div>
+            </label>
+
+            <label class="option-card" id="card-havana">
+              <input type="radio" name="colour" value="Havana" onchange="selectOption('colour','card-havana','Havana')">
+              <div class="card-image" style="padding:14px;">
+                <!-- Sostituire con: <img src="images/frame-havana.jpg" alt="Havana"> -->
+                <div class="swatch-area sw-havana"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Havana</div>
+              </div>
+            </label>
+
+            <label class="option-card" id="card-burgundy">
+              <input type="radio" name="colour" value="Burgundy" onchange="selectOption('colour','card-burgundy','Burgundy')">
+              <div class="card-image" style="padding:14px;">
+                <!-- Sostituire con: <img src="images/frame-burgundy.jpg" alt="Burgundy"> -->
+                <div class="swatch-area sw-burgundy"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Burgundy</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- STEP 3 — LENS -->
+        <div class="step">
+          <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Choose Lens Type</div>
+          </div>
+          <div class="options-grid cols-2-lens">
+
+            <label class="option-card lens-card" id="card-neutral">
+              <input type="radio" name="lens" value="Neutral" onchange="selectOption('lens','card-neutral','Neutral')">
+              <div class="card-image">
+                <!-- Sostituire con: <img src="images/lens-neutral.jpg" alt="Neutral"> -->
+                <div class="lens-swatch ls-neutral"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Neutral</div>
+                <div class="card-desc">Pure, natural vision for everyday life</div>
+              </div>
+            </label>
+
+            <label class="option-card lens-card" id="card-yellow">
+              <input type="radio" name="lens" value="Yellow" onchange="selectOption('lens','card-yellow','Yellow')">
+              <div class="card-image">
+                <!-- Sostituire con: <img src="images/lens-yellow.jpg" alt="Yellow"> -->
+                <div class="lens-swatch ls-yellow"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Yellow</div>
+                <div class="card-desc">Sharper contrast in low light</div>
+              </div>
+            </label>
+
+            <label class="option-card lens-card" id="card-grad-blue">
+              <input type="radio" name="lens" value="Gradient Blue" onchange="selectOption('lens','card-grad-blue','Gradient Blue')">
+              <div class="card-image">
+                <!-- Sostituire con: <img src="images/lens-gradient-blue.jpg" alt="Gradient Blue"> -->
+                <div class="lens-swatch ls-blue"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Gradient Blue</div>
+                <div class="card-desc">Comfort across changing environments</div>
+              </div>
+            </label>
+
+            <label class="option-card lens-card" id="card-grad-grey">
+              <input type="radio" name="lens" value="Gradient Grey" onchange="selectOption('lens','card-grad-grey','Gradient Grey')">
+              <div class="card-image">
+                <!-- Sostituire con: <img src="images/lens-gradient-grey.jpg" alt="Gradient Grey"> -->
+                <div class="lens-swatch ls-grey"></div>
+              </div>
+              <div class="card-body">
+                <div class="card-label">Gradient Grey</div>
+                <div class="card-desc">Protection from bright light and glare</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+      </div><!-- /steps -->
+
+      <!-- SUMMARY -->
+      <div class="summary-bar">
+        <div class="summary-label">Your pick</div>
+        <div class="summary-chips">
+          <div class="chip" id="chip-size"><span class="chip-label">Size&nbsp;</span><span id="chip-size-val">—</span></div>
+          <div class="chip" id="chip-colour"><span class="chip-label">Frame&nbsp;</span><span id="chip-colour-val">—</span></div>
+          <div class="chip" id="chip-lens"><span class="chip-label">Lens&nbsp;</span><span id="chip-lens-val">—</span></div>
+        </div>
+      </div>
+
+      <!-- 3D PREVIEW -->
+      <div class="preview-3d-section">
+        <div class="preview-3d-title">3D Preview — Drag to rotate 360°</div>
+        <div id="viewer-3d">
+          <div id="viewer-loading">Loading 3D model…</div>
+        </div>
+        <div class="preview-3d-hint">Click and drag to rotate · Scroll to zoom</div>
+      </div>
+
+      <!-- CUSTOMER FORM -->
+      <div class="customer-section">
+        <div class="customer-title">Your Details</div>
+
+        <form id="order-form">
+          <input type="hidden" name="Size"   id="field-size">
+          <input type="hidden" name="Colour" id="field-colour">
+          <input type="hidden" name="Lens"   id="field-lens">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="Name" required placeholder="Andrea Rossi">
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="Email" required placeholder="andrea@example.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label for="notes">Additional Notes</label>
+              <textarea id="notes" name="Notes" rows="3" placeholder="Any specific requests or questions…"></textarea>
+            </div>
+          </div>
+
+          <p class="error-msg" id="error-msg">Please complete all three steps before sending.</p>
+          <button type="submit" class="send-btn" id="send-btn">Send My Configuration</button>
+        </form>
+      </div>
+
+    </div><!-- /configurator -->
+
+    <!-- SUCCESS -->
+    <div id="success-screen">
+      <div class="success-icon">✓</div>
+      <h2>Configuration Sent!</h2>
+      <p>Your TAMI configuration has been delivered to the LightHouse Tech team. We'll get back to you shortly at the email address you provided.</p>
+    </div>
+
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> LightHouse Tech SA — All rights reserved
+  </footer>
+
+  <!-- THREE.JS for 3D viewer -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+
+    const container = document.getElementById('viewer-3d');
+    const loadingEl = document.getElementById('viewer-loading');
+
+    // Scene
+    const scene = new THREE.Scene();
+    scene.background = null;
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      container.clientWidth / container.clientHeight,
+      0.01,
+      1000
+    );
+    camera.position.set(0.25, 0.15, 0.45);
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambient);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(2, 3, 2);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0x99bbff, 0.5);
+    fillLight.position.set(-2, 1, -1);
+    scene.add(fillLight);
+
+    // Controls (360° rotation + zoom)
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 0.15;
+    controls.maxDistance = 1.2;
+    controls.target.set(0, 0, 0);
+
+    // ── Frame colour palette (matches the colour cards in step 2) ──
+    const FRAME_COLOURS = {
+      'Black':    { color: 0x1a1a1a, metalness: 0.0, roughness: 0.95 },
+      'White':    { color: 0xf5f3ef, metalness: 0.1, roughness: 0.55 },
+      'Havana':   { color: 0x8a4a14, metalness: 0.05, roughness: 0.7, texture: 'havana' },
+      'Burgundy': { color: 0x6b1424, metalness: 0.3,  roughness: 0.4  }
+    };
+
+    // ── Procedural Havana (tortoise) texture ──
+    // Bright amber-yellow base with irregular dark-brown blotches, mimicking real
+    // tortoiseshell acetate. Blotches are drawn as multi-vertex polygons (not circles)
+    // so edges look organic, then softly blurred for a satin finish.
+    let havanaTextureCache = null;
+    function makeHavanaTexture() {
+      if (havanaTextureCache) return havanaTextureCache;
+      const SIZE = 1024;
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = SIZE;
+      const ctx = canvas.getContext('2d');
+
+      // 1) Dark warm-brown base (deeper than before, less yellow)
+      const baseGrad = ctx.createLinearGradient(0, 0, SIZE, SIZE);
+      baseGrad.addColorStop(0,   '#8a4a14');
+      baseGrad.addColorStop(0.5, '#6e3a0f');
+      baseGrad.addColorStop(1,   '#52280a');
+      ctx.fillStyle = baseGrad;
+      ctx.fillRect(0, 0, SIZE, SIZE);
+
+      // 2) Amber-yellow patches — bright caramel zones that show through between the dark blotches.
+      //    These give Havana its signature warm glow without flooding the whole frame.
+      ctx.globalAlpha = 0.7;
+      for (let i = 0; i < 22; i++) {
+        const x = Math.random() * SIZE;
+        const y = Math.random() * SIZE;
+        const r = 55 + Math.random() * 110;
+        const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
+        rg.addColorStop(0,   '#e8a838');
+        rg.addColorStop(0.5, '#c47d1aaa');
+        rg.addColorStop(1,   '#c47d1a00');
+        ctx.fillStyle = rg;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Helper: irregular polygon blob (organic edges, like tortoise spots)
+      function drawBlob(cx, cy, baseRadius, color, vertices = 9) {
+        ctx.beginPath();
+        for (let i = 0; i <= vertices; i++) {
+          const ang = (i / vertices) * Math.PI * 2;
+          // Vary each vertex radius 60–130% of base for irregular shape
+          const r = baseRadius * (0.6 + Math.random() * 0.7);
+          const x = cx + Math.cos(ang) * r;
+          const y = cy + Math.sin(ang) * r;
+          if (i === 0) ctx.moveTo(x, y);
+          else         ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+
+      // 3) Dark-brown irregular blotches — the signature tortoise pattern
+      const darkPalette = ['#2a1505', '#3a1d08', '#1f0e02', '#4a2710'];
+      ctx.filter = 'blur(2px)';
+      // Larger primary blotches
+      for (let i = 0; i < 35; i++) {
+        const x = Math.random() * SIZE;
+        const y = Math.random() * SIZE;
+        const r = 35 + Math.random() * 70;
+        const c = darkPalette[(Math.random() * darkPalette.length) | 0];
+        ctx.globalAlpha = 0.85 + Math.random() * 0.15;
+        drawBlob(x, y, r, c, 8 + Math.floor(Math.random() * 6));
+      }
+      // Smaller speckles in between
+      for (let i = 0; i < 60; i++) {
+        const x = Math.random() * SIZE;
+        const y = Math.random() * SIZE;
+        const r = 8 + Math.random() * 20;
+        const c = darkPalette[(Math.random() * darkPalette.length) | 0];
+        ctx.globalAlpha = 0.7 + Math.random() * 0.3;
+        drawBlob(x, y, r, c, 7);
+      }
+      ctx.filter = 'none';
+      ctx.globalAlpha = 1;
+
+      // 4) Warm amber halos around blotches — the signature glow of real tortoiseshell
+      ctx.globalCompositeOperation = 'overlay';
+      ctx.globalAlpha = 0.22;
+      for (let i = 0; i < 18; i++) {
+        const x = Math.random() * SIZE;
+        const y = Math.random() * SIZE;
+        const r = 45 + Math.random() * 90;
+        const rg = ctx.createRadialGradient(x, y, r * 0.4, x, y, r);
+        rg.addColorStop(0, '#e8a83800');
+        rg.addColorStop(0.7, '#e8a838');
+        rg.addColorStop(1, '#e8a83800');
+        ctx.fillStyle = rg;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(1.5, 1.5);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      havanaTextureCache = tex;
+      return tex;
+    }
+
+    // ── Lens palette (matches the lens cards in step 3) ──
+    const LENS_COLOURS = {
+      'Neutral':       { color: 0xb8b6b0, opacity: 0.55 },
+      'Yellow':        { color: 0xeada6a, opacity: 0.55 },
+      'Gradient Blue': { color: 0xaac4e0, opacity: 0.50 },
+      'Gradient Grey': { color: 0x8a96a3, opacity: 0.55 }
+    };
+
+    // Mesh classification — matches FreeCAD compound names "Frame_Front", "Arms", "TempleTips", "Lenses".
+    // Specific hints (lens, templeTip) are checked BEFORE generic ones so e.g. "TempleTips"
+    // is not swallowed by the "temple" hint of arms.
+    const LENS_NAME_HINTS       = ['lens', 'lente', 'lenti', 'glass'];
+    const TEMPLE_TIP_NAME_HINTS = ['templetip', 'temple_tip', 'temple-tip', 'tip', 'punta', 'earpiece', 'ear_piece'];
+    const ARM_NAME_HINTS        = ['arm', 'temple', 'asta', 'aste', 'leg', 'side'];
+    const FRONT_NAME_HINTS      = ['front', 'frame', 'rim', 'bridge', 'frontal', 'frontale'];
+
+    function classifyMesh(mesh, modelBBoxSize) {
+      // Walk up the parent chain so children of a named compound inherit the role
+      let p = mesh;
+      while (p) {
+        const pn = (p.name || '').toLowerCase();
+        if (pn) {
+          if (LENS_NAME_HINTS.some(h => pn.includes(h)))        return 'lens';
+          if (TEMPLE_TIP_NAME_HINTS.some(h => pn.includes(h))) return 'templeTip';
+          if (ARM_NAME_HINTS.some(h => pn.includes(h)))         return 'arm';
+          if (FRONT_NAME_HINTS.some(h => pn.includes(h)))       return 'front';
+        }
+        p = p.parent;
+      }
+      // Fallback by geometry: long in Z = arm; otherwise front
+      const meshBox = new THREE.Box3().setFromObject(mesh);
+      const meshSize = meshBox.getSize(new THREE.Vector3());
+      const zRatio = meshSize.z / Math.max(modelBBoxSize.z, 1e-6);
+      return zRatio > 0.55 ? 'arm' : 'front';
+    }
+
+    // Mesh bookkeeping for runtime recolouring
+    const frontMeshes      = [];
+    const armMeshes        = [];
+    const templeTipMeshes  = [];
+    const lensMeshes       = [];
+
+    function ensureClonedMaterial(mesh) {
+      if (!mesh.userData._matCloned) {
+        mesh.material = mesh.material.clone();
+        mesh.userData._matCloned = true;
+      }
+    }
+
+    // Arms follow the frame colour ONLY when the user picks White; otherwise they stay black.
+    const ARMS_DEFAULT = FRAME_COLOURS['Black'];
+
+    function paintMeshes(meshes, preset) {
+      meshes.forEach(mesh => {
+        ensureClonedMaterial(mesh);
+
+        // For textured presets (Havana), guarantee a MeshStandardMaterial that supports maps.
+        // glTF from FreeCAD/Blender sometimes hands us a basic material; replace it.
+        if (preset.texture === 'havana') {
+          if (!mesh.material.isMeshStandardMaterial) {
+            const old = mesh.material;
+            mesh.material = new THREE.MeshStandardMaterial();
+            old.dispose && old.dispose();
+            mesh.userData._matCloned = true;
+          }
+
+          // FreeCAD-exported meshes often lack UVs — generate planar UVs on the fly so the
+          // canvas texture has somewhere to project onto.
+          const geom = mesh.geometry;
+          if (geom && !geom.attributes.uv) {
+            geom.computeBoundingBox();
+            const bb = geom.boundingBox;
+            const sizeX = bb.max.x - bb.min.x || 1;
+            const sizeY = bb.max.y - bb.min.y || 1;
+            const pos = geom.attributes.position;
+            const uvs = new Float32Array(pos.count * 2);
+            for (let i = 0; i < pos.count; i++) {
+              uvs[i * 2]     = (pos.getX(i) - bb.min.x) / sizeX;
+              uvs[i * 2 + 1] = (pos.getY(i) - bb.min.y) / sizeY;
+            }
+            geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+          }
+
+          mesh.material.map = makeHavanaTexture();
+          mesh.material.color.setHex(0xffffff);
+        } else {
+          if (mesh.material.map) {
+            mesh.material.map = null;
+          }
+          mesh.material.color.setHex(preset.color);
+        }
+
+        if ('metalness' in mesh.material) mesh.material.metalness = preset.metalness;
+        if ('roughness' in mesh.material) mesh.material.roughness = preset.roughness;
+        mesh.material.needsUpdate = true;
+      });
+    }
+
+    function applyFrameColour(colourName) {
+      const preset = FRAME_COLOURS[colourName];
+      if (!preset) return;
+      if (frontMeshes.length) paintMeshes(frontMeshes, preset);
+      // Arms follow the frame only when the user picks White; otherwise they stay black.
+      if (armMeshes.length) {
+        const armPreset = colourName === 'White' ? FRAME_COLOURS['White'] : ARMS_DEFAULT;
+        paintMeshes(armMeshes, armPreset);
+      }
+      // Temple tips are always black, regardless of the chosen frame colour.
+      if (templeTipMeshes.length) paintMeshes(templeTipMeshes, ARMS_DEFAULT);
+    }
+
+    function applyLensColour(lensName) {
+      const preset = LENS_COLOURS[lensName];
+      if (!preset || lensMeshes.length === 0) return;
+      lensMeshes.forEach(mesh => {
+        ensureClonedMaterial(mesh);
+        mesh.material.color.setHex(preset.color);
+        mesh.material.transparent = true;
+        mesh.material.opacity = preset.opacity;
+        if ('roughness' in mesh.material) mesh.material.roughness = 0.15;
+        if ('metalness' in mesh.material) mesh.material.metalness = 0.0;
+        mesh.material.needsUpdate = true;
+      });
+    }
+
+    // Expose to the (non-module) selectOption handler below
+    window.__updateFrameColour = applyFrameColour;
+    window.__updateLensColour  = applyLensColour;
+
+    // Try to load the model from /blender. If missing, show a placeholder.
+    const loader = new GLTFLoader();
+    const modelUrl = 'blender/tami-glasses.gltf';
+
+    let model = null;
+
+    loader.load(
+      modelUrl,
+      (gltf) => {
+        model = gltf.scene;
+
+        // Center & scale to fit
+        const box = new THREE.Box3().setFromObject(model);
+        const size   = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.sub(center);
+
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const targetSize = 0.3;
+        if (maxDim > 0) model.scale.setScalar(targetSize / maxDim);
+
+        // Catalogue meshes — log names so you can see what the GLB actually contains
+        console.group('[3D viewer] Mesh inventory');
+        model.traverse(obj => {
+          if (obj.isMesh) {
+            const role = classifyMesh(obj, size);
+            if      (role === 'arm')        armMeshes.push(obj);
+            else if (role === 'templeTip')  templeTipMeshes.push(obj);
+            else if (role === 'lens')       lensMeshes.push(obj);
+            else                            frontMeshes.push(obj);
+            console.log(`• "${obj.name || '(unnamed)'}" → ${role}`);
+          }
+        });
+        console.log(`Front: ${frontMeshes.length} · Arms: ${armMeshes.length} · TempleTips: ${templeTipMeshes.length} · Lenses: ${lensMeshes.length}`);
+        console.groupEnd();
+
+        scene.add(model);
+        loadingEl.style.display = 'none';
+
+        // If the user already picked options before the model finished loading, apply them now
+        const preColour = document.getElementById('field-colour')?.value;
+        const preLens   = document.getElementById('field-lens')?.value;
+        if (preColour) applyFrameColour(preColour);
+        if (preLens)   applyLensColour(preLens);
+      },
+      undefined,
+      (err) => {
+        console.warn('GLB model not found, using placeholder:', err);
+        loadingEl.innerHTML =
+          'Place your model at <strong style="color:#111827">blender/tami-glasses.glb</strong><br>' +
+          '<span style="opacity:0.6">Showing placeholder geometry</span>';
+        loadingEl.style.flexDirection = 'column';
+        loadingEl.style.textAlign = 'center';
+        loadingEl.style.lineHeight = '1.8';
+
+        // Placeholder: stylized glasses outline so users can still try the rotation
+        const group = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ color: 0x4a6ec4, metalness: 0.3, roughness: 0.4 });
+
+        const lensL = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.008, 16, 48), mat);
+        lensL.position.x = -0.07;
+        const lensR = lensL.clone(); lensR.position.x = 0.07;
+
+        const bridge = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.04, 16), mat);
+        bridge.rotation.z = Math.PI / 2;
+
+        const armL = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.008, 0.008), mat);
+        armL.position.set(-0.21, 0, -0.05); armL.rotation.y = Math.PI / 8;
+        const armR = armL.clone(); armR.position.x = 0.21; armR.rotation.y = -Math.PI / 8;
+
+        group.add(lensL, lensR, bridge, armL, armR);
+        scene.add(group);
+        model = group;
+      }
+    );
+
+    // Resize
+    function onResize() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', onResize);
+
+    // Render loop
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const selection = { size: null, colour: null, lens: null };
+    const cardMap   = { size: null, colour: null, lens: null };
+
+    function selectOption(group, cardId, value) {
+      if (cardMap[group]) document.getElementById(cardMap[group]).classList.remove('selected');
+      cardMap[group] = cardId;
+      document.getElementById(cardId).classList.add('selected');
+      selection[group] = value;
+      document.getElementById(`chip-${group}-val`).textContent = value;
+      document.getElementById(`field-${group}`).value = value;
+
+      // Live-update the 3D model when the user picks a frame colour or a lens type
+      if (group === 'colour' && typeof window.__updateFrameColour === 'function') {
+        window.__updateFrameColour(value);
+      }
+      if (group === 'lens' && typeof window.__updateLensColour === 'function') {
+        window.__updateLensColour(value);
+      }
+    }
+
+    // ── Wix integration ─────────────────────────────────────────────
+    // This variant of the configurator runs inside an iframe on a Wix page.
+    // Instead of opening the user's mail client (mailto:), it forwards the
+    // submission to the parent Wix page via postMessage. Velo on the parent
+    // receives it and triggers a server-side email send — no client app opens.
+    const sendBtn = document.getElementById('send-btn');
+    let awaitingAck = false;
+
+    function postToParent(msg) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(msg, '*');
+      }
+    }
+
+    document.getElementById('order-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (awaitingAck) return;
+
+      const errEl = document.getElementById('error-msg');
+      if (!selection.size || !selection.colour || !selection.lens) {
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      const payload = {
+        size:   selection.size,
+        colour: selection.colour,
+        lens:   selection.lens,
+        name:   document.getElementById('name').value.trim(),
+        email:  document.getElementById('email').value.trim(),
+        notes:  document.getElementById('notes').value.trim()
+      };
+
+      awaitingAck = true;
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending…';
+
+      postToParent({ type: 'submitConfiguration', payload });
+    });
+
+    // The parent Wix page acknowledges the submission. On success we swap to the
+    // success screen; on failure we re-enable the button so the user can retry.
+    window.addEventListener('message', (event) => {
+      const msg = event.data;
+      if (!msg || typeof msg !== 'object') return;
+
+      if (msg.type === 'configurationSent') {
+        document.getElementById('configurator').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      if (msg.type === 'configurationError') {
+        awaitingAck = false;
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send My Configuration';
+        const errEl = document.getElementById('error-msg');
+        errEl.textContent = msg.error || 'Something went wrong. Please try again.';
+        errEl.style.display = 'block';
+      }
+    });
+
+    // Signal to the parent that the configurator is alive and listening
+    postToParent({ type: 'configuratorReady' });
+  </script>
+
+</body>
+</html>

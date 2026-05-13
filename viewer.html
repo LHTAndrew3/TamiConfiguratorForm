@@ -314,8 +314,16 @@
     //   { type: 'modelLoaded' }       — once GLB has been parsed and added to scene
     //   { type: 'modelError', error } — if GLB fails to load
     window.addEventListener('message', (event) => {
-      const data = event.data || {};
+      console.log('[viewer] raw message received:', event.data);
+
+      // Wix sometimes wraps the payload — unwrap if necessary
+      let data = event.data;
+      if (data && typeof data === 'object' && data.data && typeof data.data === 'object' && data.data.type) {
+        data = data.data;
+      }
       if (!data || typeof data !== 'object') return;
+
+      console.log('[viewer] processing:', data);
 
       switch (data.type) {
         case 'setColour':

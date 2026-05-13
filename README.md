@@ -4,10 +4,11 @@ Application for configuring TAMI assistive mobility eyewear, developed by **Ligh
 
 The app guides sales staff or end customers through a three-step visual configurator — size, frame colour, and lens type — with a live 3D preview of the glasses. Once satisfied, the user fills in their contact details and the app opens their default email client with the configuration pre-filled and ready to send.
 
-The project ships in two flavours from a single codebase:
+The project ships in three flavours from a single codebase:
 
 - **Desktop app** ([index_exec.html](index_exec.html)) — packaged with Tauri 2 into native installers for Windows (`.exe`) and macOS (`.dmg` / `.app`).
 - **Web app** ([index.html](index.html)) — same configurator, deployed as a static site on GitHub Pages and accessible from any browser via a public link.
+- **Embedded 3D viewer** ([viewer.html](viewer.html)) — headless variant of the 3D preview only (no UI), designed to be embedded as an iframe inside the Wix Stores TAMI product page. Communicates with the host page via `postMessage` to react in real time to the customer's frame-colour and lens-type selections.
 
 The two entry-point files are identical except for the mailto trigger: the desktop version calls `__TAURI__.invoke('open_url', ...)` (required because the Tauri WebView does not follow `window.location.href` for `mailto:` schemes), while the web version uses a plain `window.location.href = mailto` (handled by the browser, which opens the user's default mail client — Outlook, Gmail, Apple Mail, etc.).
 
@@ -180,12 +181,79 @@ Wait ~1–2 minutes, then hard-refresh the live URL (`Ctrl+Shift+R` / `Cmd+Shift
 
 ---
 
+## Embedded 3D viewer — Wix Stores integration
+
+The repository also ships a third entry point, [viewer.html](viewer.html), which is a **headless** version of the 3D preview: only the Three.js canvas, no configurator UI. It is meant to be embedded as an iframe inside the **Wix Stores TAMI product page** so that the customer can rotate the glasses in 3D while picking SIZE / COLOR / Lens with the native Wix product selectors. The frame colour and lens tint update in real time as the customer interacts with the Wix widgets.
+
+**Live URL:** [https://lhtandrew3.github.io/TamiConfiguratorForm/viewer.html](https://lhtandrew3.github.io/TamiConfiguratorForm/viewer.html)
+
+### How it works
+
+The viewer and the Wix page talk to each other via `window.postMessage`. The Wix page hosts Velo code that listens to the Wix Stores product widget; whenever the customer clicks a colour swatch or a lens swatch, Velo forwards the new value to the iframe.
+
+```
+┌─ Wix Stores Product Page (TAMI) ─────────────────────────┐
+│                                                          │
+│  ┌─── iframe (viewer.html) ───┐    SIZE   [▼ Regular]    │
+│  │   Three.js 3D model         │    COLOR  ● ● ○ ●        │
+│  │   (rotatable / zoomable)    │    Lens   ○ ● ● ○        │
+│  └─────────────────────────────┘    Quantity / Order      │
+│              ▲                                            │
+│              │ postMessage                                │
+│              │                                            │
+│   ┌─ Velo (page code) ───────────────────────────────┐    │
+│   │  $w('#productPage1').onChoiceSelected(...)       │    │
+│   │  → maps Wix choice → viewer command              │    │
+│   │  → viewer.postMessage({ type, value })           │    │
+│   └──────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Message protocol
+
+**From Wix (parent) → viewer (iframe):**
+
+| Message | Description |
+|---|---|
+| `{ type: 'setColour', value: 'Black' \| 'White' \| 'Havana' \| 'Burgundy' }` | repaint the frame and arms |
+| `{ type: 'setLens',   value: 'Neutral' \| 'Yellow' \| 'Gradient Blue' \| 'Gradient Grey' }` | retint the lenses |
+| `{ type: 'resetView' }` | reset the orbit camera to its initial position |
+
+**From viewer (iframe) → Wix (parent):**
+
+| Message | Description |
+|---|---|
+| `{ type: 'viewerReady' }` | the viewer JS is loaded and listening |
+| `{ type: 'modelLoaded' }` | the GLB has been parsed and added to the scene |
+| `{ type: 'modelError', error }` | the GLB failed to load |
+
+Commands received before `modelLoaded` are buffered and replayed automatically when the model becomes ready, so the parent never has to wait or poll.
+
+### Wix setup (Velo)
+
+The host page lives inside the Wix Stores template **Store Pages → Product Page** and exposes the `#productPage1` widget. The page code uses the **`onChoiceSelected`** event of the product widget — the only officially supported way to listen to option changes in Product Page V2 — and `getSelectedChoices()` to read the full current state. Because `COLOR` and `Lens` are typed as **`color`** options in Wix Stores, the choice values arrive as hex codes (e.g. `#000000`) rather than human-readable names; the hex → name map is built at runtime from `getProduct().productOptions`, so renaming a colour in the Wix Dashboard does not require a code change.
+
+The viewer is **collapsed automatically** if the visitor opens a product whose name does not contain "TAMI" — the template page is shared across all store products, but the 3D viewer is meaningful only for TAMI.
+
+### Updating the embedded viewer
+
+The viewer is published by the same GitHub Pages deployment as the web app — push to `main`, wait ~1–2 minutes, hard-refresh the Wix preview/live page.
+
+```bash
+git add viewer.html
+git commit -m "update embedded viewer"
+git push
+```
+
+---
+
 ## Project structure
 
 ```
 TamiConfiguratorForm/
 ├── index.html          # web/GitHub Pages entry point (mailto via window.location.href)
 ├── index_exec.html     # Tauri desktop entry point (mailto via __TAURI__.invoke)
+├── viewer.html         # headless 3D viewer embedded into the Wix product page via iframe
 ├── .nojekyll           # disables Jekyll on GitHub Pages
 ├── assets/             # company logo, icons
 ├── images/             # size/view reference photos
