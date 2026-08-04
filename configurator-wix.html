@@ -853,6 +853,24 @@
               <span>I give permission to add my email to future Lighthouse Tech newsletters with company updates, new products, and events.</span>
             </label>
           </div>
+          
+          <!-- PRICE DISPLAY -->
+          <div id="price-box" style="
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: var(--blue-light);
+            border: 1px solid var(--blue-mid);
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+            <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;
+                        text-transform:uppercase;color:var(--muted);">Price</span>
+            <span id="price-display" style="font-size:22px;font-weight:700;color:var(--blue);">
+              Select country
+            </span>
+          </div>
 
           <p class="error-msg" id="error-msg">Please complete all three steps before sending.</p>
           <button type="submit" class="send-btn" id="send-btn">Send My Configuration</button>
@@ -1266,10 +1284,36 @@
   </script>
 
   <script>
+  
+    // ── Client-side pricing (solo per display) ──────────────────────────────────
+    const _CHF = ['Switzerland', 'Liechtenstein'];
+    const _EUR = ['Austria','Belgium','Bulgaria','Croatia','Cyprus','Czechia',
+                  'Denmark','Estonia','Finland','France','Germany','Greece',
+                  'Hungary','Ireland','Italy','Latvia','Lithuania','Luxembourg',
+                  'Malta','Netherlands','Poland','Portugal','Romania','Slovakia',
+                  'Slovenia','Spain','Sweden'];
+
+    function _getCurrency(country) {
+      if (_CHF.includes(country)) return 'CHF';
+      if (_EUR.includes(country)) return 'EUR';
+      return 'USD';
+    }
+
+    const _PRICES = { CHF: 'CHF 1\'600', EUR: '€ 1.600', USD: '$ 1,200' };
+
+    function updatePriceDisplay() {
+      const country = document.getElementById('country').value;
+      const el = document.getElementById('price-display');
+      if (!el) return;
+      el.textContent = country ? _PRICES[_getCurrency(country)] : 'Select country';
+    }
+
 
     const selection = { size: null, colour: null, lens: null };
     const cardMap   = { size: null, colour: null, lens: null };
 
+    document.getElementById('country').addEventListener('change', updatePriceDisplay);
+    
     function selectOption(group, cardId, value) {
       if (cardMap[group]) document.getElementById(cardMap[group]).classList.remove('selected');
       cardMap[group] = cardId;
